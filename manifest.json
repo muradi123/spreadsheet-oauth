@@ -1,48 +1,48 @@
 {
-    "name": "spreadsheet ",
-    "description" : "add spreadsheet value",
-    "version": "1.1",
-    "icons":{
-        "128":"./images/folder-128.png",
-        "64":"./images/folder-64.png",
-        "16":"./images/folder-16.png"
-    },
+  "name": "spreadsheet ",
+  "description" : "add spreadsheet value",
+  "version": "1.1",
+  "icons":{
+      "128":"./images/folder-128.png",
+      "64":"./images/folder-64.png",
+      "16":"./images/folder-16.png"
+  },
 
-    "manifest_version": 2,
-    "browser_action": {
-      "default_icon": "./images/folder-16.png",
-      "default_popup": "popup.html"
-    },
+  "manifest_version": 2,
+  "browser_action": {
+    "default_icon": "./images/folder-16.png",
+    "default_popup": "popup.html"
+  },
 
 
 
-    "permissions": ["https://docs.google.com/spreadsheets/","https://script.google.com/",
-      "https://sheets.googleapis.com/*","identity", "tabs", "storage", "http://*/",
-      "https://*/",  "contentSettings" ],
+  "permissions": ["https://docs.google.com/spreadsheets/","https://script.google.com/",
+    "https://sheets.googleapis.com/*","identity", "tabs", "storage", "http://*/",
+    "https://*/",  "contentSettings" ],
 
     "background": {
-      "scripts": ["./scripts/jquery.js",  "./scripts/background.js"]
-     
+      "page": "background.html",
+      "persistent": false
     },
-    "web_accessible_resources":[
-      "./images/*.png"
-    ],
-    "oauth2": {
-      "client_id": "135771418343-v86kgtr82902sd471eddoha1toq6n0cc.apps.googleusercontent.com",
-      "spreadsheetId": "1pHz7hJoS7a2ICXHN6pNXAeaK-KnbaYqhzmJIJznq0Ss",
-      "key":"AIzaSyCwG7kEQs03iNNyRPfrkyKrtAaTz8hxIbo",
-      "scopes": [
-          "https://www.googleapis.com/auth/spreadsheets.readonly",
-          "https://www.googleapis.com/auth/userinfo.email",
-          "profile"
-     ]},
-    "content_security_policy": "script-src 'self'; object-src 'self'",
-    
-    "content_scripts": [
-        {
-          "run_at":"document_end",
-          "matches": ["<all_urls>"],
-          "js": ["./scripts/jquery.js",  "./scripts/content.js"]
-        }
-    ]
+  "web_accessible_resources":[
+    "./images/*.png"
+  ],
+  "oauth2": {
+    "client_id": "135771418343-v86kgtr82902sd471eddoha1toq6n0cc.apps.googleusercontent.com",
+    "spreadsheetId": "1pHz7hJoS7a2ICXHN6pNXAeaK-KnbaYqhzmJIJznq0Ss",
+    "key":"AIzaSyCwG7kEQs03iNNyRPfrkyKrtAaTz8hxIbo",
+    "scopes": [
+        "https://www.googleapis.com/auth/spreadsheets.readonly",
+        "https://www.googleapis.com/auth/userinfo.email",
+        "profile"
+   ]},
+   "content_security_policy": "script-src 'self' https://apis.google.com/; object-src 'self'",
+  
+  "content_scripts": [
+      {
+        "run_at":"document_end",
+        "matches": ["<all_urls>"],
+        "js": ["./scripts/jquery.js",  "./scripts/content.js"]
+      }
+  ]
 }

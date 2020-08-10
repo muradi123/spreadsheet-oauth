@@ -3,35 +3,48 @@ document.querySelector('.google-6adxtmm530').addEventListener('click',function()
         if(signedIn){
             document.querySelector('.ji2tnzm452').style.display = 'none';
             document.querySelector('.upito3e84n').style.display = 'block';
-            document.querySelector('.p6ehrhiav2').onclick = signOutClick;
+            document.querySelector('.rs21nz989m').onclick = signOutClick;
         }else{
             document.querySelector('.ji2tnzm452').style.display = 'block';
-            document.querySelector('.upito3e84n').style.display = 'none';
-
+            document.querySelector('.upito3e84n').style.display = 'none';  
+            document.querySelector('.google-6adxtmm530').onclick = signInClick;
         }
+               
+        });
+       
+    })
+    
+    chrome.storage.local.get(['getToken'], function(result) {
+        console.log(result.getToken);
+        if(result.getToken){
+            document.querySelector('.ji2tnzm452').style.display = 'none';
+            document.querySelector('.upito3e84n').style.display = 'block';
+            document.querySelector('.rs21nz989m').onclick = signOutClick;
+        }else{
+            document.querySelector('.ji2tnzm452').style.display = 'block';
+            document.querySelector('.upito3e84n').style.display = 'none';  
+            document.querySelector('.google-6adxtmm530').onclick = signInClick;
+        }
+      });
+    
+    function signOutClick(event){
+        chrome.runtime.sendMessage({cmd: 'signOut'}, function (token) {
+             console.log('works');
+         document.querySelector('.ji2tnzm452').style.display = 'block';
+         document.querySelector('.upito3e84n').style.display = 'none';  
+            
     });
-})
+    }
+    
+    function signInClick(event){
+       chrome.runtime.sendMessage({cmd: 'doAuthorize'}, function (resp) {
+       console.log(resp);
+      });
+    }
 
-chrome.storage.local.get(['tokens'], function(result) {
- if(result.tokens){
-    document.querySelector('.ji2tnzm452').style.display = 'none';
-    document.querySelector('.upito3e84n').style.display = 'block';
-    document.querySelector('.p6ehrhiav2').onclick = signOutClick;
- }else{
-    document.querySelector('.ji2tnzm452').style.display = 'block';
-    document.querySelector('.upito3e84n').style.display = 'none';
 
- }
-  });
 
-function signOutClick(event){
-    chrome.runtime.sendMessage({cmd: 'signOut'}, function () {
-     console.log('works');
-     document.querySelector('.ji2tnzm452').style.display = 'block';
-     document.querySelector('.upito3e84n').style.display = 'none';  
-        
-});
-}
+
 
 let allDate = new Date().toLocaleDateString("en", {year:"numeric", day:"2-digit", month:"2-digit"});
 $('.x9v42lx9m9').html(allDate);
