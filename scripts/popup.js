@@ -1,5 +1,5 @@
 document.querySelector('.google-6adxtmm530').addEventListener('click',function(){
-    chrome.runtime.sendMessage({cmd: 'getAuthorize'}, function (signedIn) {
+    chrome.runtime.sendMessage({cmd: 'doAuthorize'}, function (signedIn) {
         if(signedIn){
             document.querySelector('.ji2tnzm452').style.display = 'none';
             document.querySelector('.upito3e84n').style.display = 'block';
@@ -13,7 +13,6 @@ document.querySelector('.google-6adxtmm530').addEventListener('click',function()
         });
        
     })
-    
     chrome.storage.local.get(['getToken'], function(result) {
         console.log(result.getToken);
         if(result.getToken){
@@ -26,7 +25,6 @@ document.querySelector('.google-6adxtmm530').addEventListener('click',function()
             document.querySelector('.google-6adxtmm530').onclick = signInClick;
         }
       });
-    
     function signOutClick(event){
         chrome.runtime.sendMessage({cmd: 'signOut'}, function (token) {
              console.log('works');
@@ -35,13 +33,20 @@ document.querySelector('.google-6adxtmm530').addEventListener('click',function()
             
     });
     }
-    
-    function signInClick(event){
-       chrome.runtime.sendMessage({cmd: 'doAuthorize'}, function (resp) {
-       console.log(resp);
-      });
-    }
 
+    function signInClick(event){
+        chrome.runtime.sendMessage({cmd: 'doAuthorize'}, function (resp) {
+        console.log(resp);
+       });
+     }
+
+document.querySelector('.qlthlky5u4').addEventListener('click', function(){
+    let textarea1 = document.querySelector('.ljkja2bmfy').value;
+    console.log(textarea1);
+    let textarea2 = document.querySelector('.hdwmv2efr7w').value;
+    console.log(textarea2) 
+    chrome.runtime.sendMessage({message: 'getval', val:textarea1, val2:textarea2});
+})
 
 
 
@@ -49,10 +54,12 @@ document.querySelector('.google-6adxtmm530').addEventListener('click',function()
 let allDate = new Date().toLocaleDateString("en", {year:"numeric", day:"2-digit", month:"2-digit"});
 $('.x9v42lx9m9').html(allDate);
 $( ".umma37171x" ).click(function() {
+
     let ul =  $('ul');
     let val = $('.pq4q5qh3a6').val();
     let textArea = $('.h8k60bye3t').val();
     let divDate = $('.x9v42lx9m9').html();
+    chrome.runtime.sendMessage({message: 'getvalue', value1:val, value2:textArea});
     if(val.length > 0){
        let itemList = `
        <div class="qb9o8ilb1e">
@@ -76,19 +83,27 @@ $( ".umma37171x" ).click(function() {
           </div>
           <div class="hvafvg7g06">
             <div class="u0fh0j9ps6">${allDate}</div>
-            <div class="apmgvv8am4"><img src="../images/back.png"></div> 
+            <div class="apmgvv8am4"><img src="./images/back.png"></div> 
           </div>
        </div>
        </div>`;
        
        $('.mfqqihmd9p').append(fullDiv);
+
        $(".b3eo410mee").click(function () {
-       let index2 = $(this).parent().index();
-       console.log(index2);
-       document.querySelectorAll('.chkhka194i')[index2].remove();
+       
+
+        let index2 = $(this).parent().index();
+        console.log(index2);
+        chrome.runtime.sendMessage({removeVal: 'delete',ind:index2});
+        if (index2 > 0) {
+         $('.chkhka194i')[index2].remove();
+
+       }
        $(this).parent().remove();
        });
         
+
       $('.qqpsha6z32').click(function(){  
       let ind = $(this).parent().index();
       let div =  document.querySelectorAll('.chkhka194i')[ind].innerText;
@@ -134,5 +149,4 @@ $( ".umma37171x" ).click(function() {
     TeaxtArea2.val('');
   });
 
-
-
+  
