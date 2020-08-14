@@ -105,17 +105,6 @@ function doAuthorize(sendResponse){
     });
   });
 }
-
-
-
-
-
-
-
-
-
-
-
 function signOut(sendResponse){
   chrome.identity.getAuthToken({ 'interactive': true }, function(token) {
       let url = 'https://accounts.google.com/o/oauth2/revoke?token=' + token;
