@@ -14,19 +14,22 @@ const CLIENT_ID = "125271549057-gqgbtjucihnisg32tuatrpd9dqnm8m5s.apps.googleuser
 const DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"];
 const SCOPES = "https://www.googleapis.com/auth/spreadsheets.readonly";
 const SCOPE = 'https://www.googleapis.com/auth/spreadsheets.readonly';
- let params = {
+let params = {
   "range":"Sheet1!A:C",
   "majorDimension": "ROWS",
   "values": [
     
-   ],
- }
+  ],
+}
 
 let SPREADSHEET_ID;
 let SPREADSHEET_TAB_NAME;
 let index;
+let init;
+
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+
   if(request.message === 'getval'){
   console.log(request.val)
   console.log(request.val2)
@@ -34,6 +37,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   SPREADSHEET_TAB_NAME = request.val2;
   }
  
+
   if(request.message==='getvalue'){
   console.log(request.value1);
   console.log(request.value2)
@@ -48,7 +52,8 @@ chrome.storage.local.get(['getToken'], function(result) {
   array.push(date, text1, text2)
   params.values.push(array);
  
-  let init = {
+
+ init = {
     method: 'PUT',
     async: true,
     body:JSON.stringify(params),
@@ -57,43 +62,38 @@ chrome.storage.local.get(['getToken'], function(result) {
       'Content-Type': 'application/json'
     },
       'contentType': 'json',
-    };
-  fetch(
+       };
+   fetch(
     `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${SPREADSHEET_TAB_NAME}!A:C?valueInputOption=USER_ENTERED`,
       init)
-     .then((response) => console.log(response))
-     }
-       })
-          }
+      .then((response) => console.log(response))
+
+
+        }
+
+      })
+    }
 
 
     if(request.removeVal === 'delete'){
-      let index = request.ind;
-      chrome.storage.local.get(['getToken'], function(result) {
-        let access_token = result.getToken;
-        if(access_token){
-          
-        let request = {
-          method: 'GET',
-          async: true,
-          headers: {
-            Authorization: 'Bearer ' + access_token,
-            'Content-Type': 'application/json'
-            },
-            'contentType': 'json',
-            };
-        fetch(
-            `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${SPREADSHEET_TAB_NAME}!A:C`,
-            request)
-            .then((response) => response.json())
-            .then(function(data) {
-              data.values.pop()
-              console.log(data)
+      index = request.ind;
+      console.log(index)
+      
+      let indx = index + 1;   
+      
+      fetch(
+       `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/Sheet1!A${indx}:C${indx}:clear`,
+        Object.assign({},init,{method:'POST',body:""}))
+       .then((response) => console.log(response))
+             }
+
+
             })
-              }
-            })
-          }
-})
+        
+
+
+
+
 
 function doAuthorize(sendResponse){
 	chrome.identity.getAuthToken(
@@ -105,6 +105,8 @@ function doAuthorize(sendResponse){
     });
   });
 }
+
+
 function signOut(sendResponse){
   chrome.identity.getAuthToken({ 'interactive': true }, function(token) {
       let url = 'https://accounts.google.com/o/oauth2/revoke?token=' + token;
@@ -121,5 +123,6 @@ function signOut(sendResponse){
 })
 sendResponse();
 }
+
 
 
